@@ -7,7 +7,7 @@
 
 #include "Game.h"
 #include <iostream>
-
+#include <iomanip>
 
 /// <summary>
 /// default constructor
@@ -16,7 +16,7 @@
 /// load and setup thne image
 /// </summary>
 Game::Game() :
-	m_window{ sf::VideoMode{ ScreenSize::width, ScreenSize::height, 32U }, "Networked Tag Game " },
+	m_window{ sf::VideoMode{ 880, 880, 32U }, "Networked Tag Game " },
 	m_exitGame{ false }, myClient("127.0.0.1", 623) //when true game will exit
 {
 	if (!myClient.Connect()) //If client fails to connect...
@@ -24,6 +24,21 @@ Game::Game() :
 		std::cout << "Failed to connect to server..." << std::endl;
 		system("pause");
 	}
+
+	if (!tile.loadFromFile("ASSETS/tile.png"))
+	{
+		std::cout << "failed loading font " << std::endl;
+	}
+
+	if (!m_font.loadFromFile("ASSETS/FONTS/Pixellari.ttf"))
+	{
+		std::cout << "failed loading font " << std::endl;
+	}
+	tileSprite.setTexture(tile);
+	timerText.setFont(m_font);
+	timerText.setCharacterSize(70.0f);
+	timerText.setPosition(100, 100);
+	
 }
 
 /// <summary>
@@ -48,7 +63,6 @@ void Game::run()
 	sf::Time timeSinceLastUpdate = sf::Time::Zero;
 	const float fps{ 60.0f };
 	sf::Time timePerFrame = sf::seconds(1.0f / fps); // 60 fps
-
 	while (m_window.isOpen())
 	{
 		processEvents(); // as many as possible
@@ -58,6 +72,8 @@ void Game::run()
 			timeSinceLastUpdate -= timePerFrame;
 			processEvents(); // at least 60 fps
 			update(timePerFrame); //60 fps
+			timer2 = Timer.getElapsedTime();
+
 		}
 		render(); // as many as possible
 	}
@@ -136,7 +152,7 @@ void Game::update(sf::Time t_deltaTime)
 
 	player.checkCollision(Player2.getPlayer());
 
-	if (numberOfPlayer == 3)
+	if (numberOfPlayer == 4)
 	{
 		Player2.setPosition(getPosFromServer(myClient.getPositionMessage(), true));
 		Player3.setPosition(getPosFromServer(myClient.getPositionMessage(), false));
@@ -176,6 +192,13 @@ void Game::update(sf::Time t_deltaTime)
 		Player3.init(opponentPosPlayer3[0]);
 		std::cout << Player3.getPlayerID() << std::endl;
 	}
+	timerText.setString(std::to_string(timer2.asSeconds()));
+	
+	if (Timer.getElapsedTime().asSeconds() > 10)
+	{
+		timer2 = Timer.restart();
+
+	}
 }
 
 /// <summary>
@@ -184,10 +207,11 @@ void Game::update(sf::Time t_deltaTime)
 void Game::render()
 {
 	m_window.clear(sf::Color::Black);
-
+	m_window.draw(tileSprite);
+	m_window.draw(timerText);
+	player.render(m_window);
 	Player2.render(m_window);
 	Player3.render(m_window);
-	player.render(m_window);
 	m_window.display();
 }
 

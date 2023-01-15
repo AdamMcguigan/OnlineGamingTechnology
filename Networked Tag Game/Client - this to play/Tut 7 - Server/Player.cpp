@@ -6,13 +6,40 @@ void Player::init(std::string stringID)
 
 	setPlayerColor();
 
-	player.setSize(sf::Vector2f(100, 100));
-	player.setPosition(sf::Vector2f(500, 500));
+	player.setSize(sf::Vector2f(50, 50));
+	player.setPosition(sf::Vector2f(20, 100));
+
+
+	if (!m_font.loadFromFile("ASSETS/FONTS/Pixellari.ttf"))
+	{
+		std::cout << "failed loading font " << std::endl;
+	}
+
+	m_text.setFont(m_font);
+	m_text.setCharacterSize(70.0f);
+	m_text.setPosition(10, 10);
+
+	if (playerID == 0)
+	{
+		player.setPosition(20, 100);
+	}
+
+	//this is for testing with another client started on local PC
+	else if (playerID == 1)
+	{
+		player.setPosition(200, 600);
+	}
+
+	else if (playerID == 2)
+	{
+		player.setPosition(500, 300);
+	}
 }
 
 void Player::render(sf::RenderWindow& win)
 {
 	win.draw(player);
+	win.draw(m_text);
 }
 
 void Player::update()
@@ -20,12 +47,23 @@ void Player::update()
 	if (playerID == 0)
 	{
 		playerMovement();
+		setText1();
+
 	}
 
 	//this is for testing with another client started on local PC
 	else if (playerID == 1)
 	{
 		player2Movement();
+		setText2();
+
+	}
+
+	else if (playerID == 2)
+	{
+		player3Movement();
+		setText3();
+
 	}
 }
 
@@ -69,6 +107,43 @@ void Player::player2Movement()
 	}
 }
 
+void Player::player3Movement()
+{
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::I))
+	{
+		player.move(0, -10);
+	}
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::K))
+	{
+		player.move(0, 10);
+	}
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::J))
+	{
+		player.move(-10, 0);
+	}
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::L))
+	{
+		player.move(10, 0);
+	}
+}
+
+void Player::setText1()
+{
+	m_text.setString("Your Colour is Green");
+
+}
+
+void Player::setText2()
+{
+	m_text.setString("Your Colour is Blue");
+
+}
+
+void Player::setText3()
+{
+	m_text.setString("Your Colour is Magenta");
+
+}
 //This Method is checking for collision between players
 void Player::checkCollision(sf::RectangleShape opponent)
 {
@@ -115,6 +190,9 @@ void Player::setPlayerColor()
 {
 	switch (playerID)
 	{
+	case 0:
+		color = sf::Color::Green;
+		break;
 	case 1:
 		color = sf::Color::Blue;
 		break;

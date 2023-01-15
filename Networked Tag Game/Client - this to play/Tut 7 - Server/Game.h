@@ -10,6 +10,7 @@
 #include "Player.h"
 #include "Client.h"
 
+
 class Game
 {
 public:
@@ -39,13 +40,20 @@ private:
 	sf::RenderWindow m_window; // main SFML window
 	sf::Font m_ArialBlackfont; // font used by message
 	sf::Text m_welcomeMessage; // text used for message on screen
-	sf::Texture m_logoTexture; // texture used for sfml logo
-	sf::Sprite m_logoSprite; // sprite used for sfml logo
+	sf::Texture tile; // texture used for sfml logo
+	sf::Sprite tileSprite; // sprite used for sfml logo
 	bool m_exitGame; // control exiting game
 
 	Player player;
 	Player Player2;
 	Player Player3;
+
+
+	sf::Clock Timer;
+	sf::Time timer2;
+	sf::Font m_font;
+	sf::Text timerText;
+
 
 	Client myClient;
 

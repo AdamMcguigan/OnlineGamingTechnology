@@ -1,7 +1,3 @@
-﻿  Client.cpp
-  Game.cpp
-  Main.cpp
-  Player.cpp
-  SendGetMethods.cpp
-  Generating Code...
-  Tut 7 - Server.vcxproj -> C:\Users\adamm\Desktop\Online Gaming Technology\OnlineGamingTechnology\Networked Tag Game\Client - this to play\Debug\Tut 7 - Server.exe
+﻿  Game.cpp
+E:\leiProject\OnlineGamingTechnology\Networked Tag Game\Client - this to play\Tut 7 - Server\Game.cpp(39,29): warning C4244: 'argument': conversion from 'float' to 'unsigned int', possible loss of data
+  Tut 7 - Server.vcxproj -> E:\leiProject\OnlineGamingTechnology\Networked Tag Game\Client - this to play\Debug\Tut 7 - Server.exe
