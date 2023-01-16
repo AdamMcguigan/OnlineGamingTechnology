@@ -47,6 +47,7 @@ void Player::update()
 	if (playerID == 0)
 	{
 		playerMovement();
+		
 		setText1();
 
 	}
@@ -65,6 +66,8 @@ void Player::update()
 		setText3();
 
 	}
+
+	checkWalls();
 }
 
 void Player::playerMovement()
@@ -127,6 +130,28 @@ void Player::player3Movement()
 	}
 }
 
+void Player::checkWalls()
+{
+	if (player.getPosition().x > 880 + player.getSize().x)
+	{
+		player.setPosition(0 - player.getSize().x,player.getPosition().y);
+	}
+	if (player.getPosition().x < 0 - player.getSize().x)
+	{
+		player.setPosition(880 + player.getSize().x, player.getPosition().y);
+	}
+	if (player.getPosition().y < 0 - player.getSize().y)
+	{
+		player.setPosition(player.getPosition().x, 880 + player.getSize().y);
+	}
+	if (player.getPosition().y > 880 + player.getSize().y)
+	{
+		player.setPosition(player.getPosition().x, 0 - player.getSize().y);
+	}
+
+
+}
+
 void Player::setText1()
 {
 	m_text.setString("Your Colour is Green");
@@ -152,6 +177,7 @@ void Player::checkCollision(sf::RectangleShape opponent)
 		player.setFillColor(sf::Color::Yellow);
 		std::cout << "Player: " << getPlayerID() << "is colliding" << std::endl;
 		isColliding = true;
+		
 	}
 
 	else

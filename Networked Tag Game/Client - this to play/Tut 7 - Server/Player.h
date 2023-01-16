@@ -23,7 +23,7 @@ public:
 	void setText1();
 	void setText2();
 	void setText3();
-
+	void checkWalls();
 	sf::RectangleShape getPlayer();
 
 	bool isIDSet();

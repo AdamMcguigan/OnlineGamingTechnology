@@ -34,6 +34,7 @@ Game::Game() :
 	{
 		std::cout << "failed loading font " << std::endl;
 	}
+	timerAlive = true;
 	tileSprite.setTexture(tile);
 	timerText.setFont(m_font);
 	timerText.setCharacterSize(70.0f);
@@ -72,8 +73,10 @@ void Game::run()
 			timeSinceLastUpdate -= timePerFrame;
 			processEvents(); // at least 60 fps
 			update(timePerFrame); //60 fps
-			timer2 = Timer.getElapsedTime();
-
+			if (timerAlive == true)
+			{
+				timer2 = Timer.getElapsedTime();
+			}
 		}
 		render(); // as many as possible
 	}
@@ -148,9 +151,16 @@ void Game::update(sf::Time t_deltaTime)
 	{
 		player.init(myClient.getID_Message());
 	}
-	player.update();
-
+	if (timerAlive == true)
+	{
+		player.update();
+	}
 	player.checkCollision(Player2.getPlayer());
+	if (player.CheckForCollision() =="1")
+	{
+		timerAlive = false;
+
+	}
 
 	if (numberOfPlayer == 4)
 	{
@@ -192,13 +202,9 @@ void Game::update(sf::Time t_deltaTime)
 		Player3.init(opponentPosPlayer3[0]);
 		std::cout << Player3.getPlayerID() << std::endl;
 	}
-	timerText.setString(std::to_string(timer2.asSeconds()));
+	timerText.setString("survival time: " + std::to_string(timer2.asSeconds()));
 	
-	if (Timer.getElapsedTime().asSeconds() > 10)
-	{
-		timer2 = Timer.restart();
 
-	}
 }
 
 /// <summary>

@@ -53,7 +53,7 @@ private:
 	sf::Time timer2;
 	sf::Font m_font;
 	sf::Text timerText;
-
+	bool timerAlive = false;
 
 	Client myClient;
 
