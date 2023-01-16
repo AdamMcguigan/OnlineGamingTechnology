@@ -1,16 +1,22 @@
-﻿  Player.cpp
-E:\leiProject\OnlineGamingTechnology\Networked Tag Game\Client - this to play\Tut 7 - Server\Player.cpp(18,32): warning C4244: 'argument': conversion from 'float' to 'unsigned int', possible loss of data
+﻿  Client.cpp
+  Game.cpp
+E:\leiProject\OnlineGamingTechnology\Networked Tag Game\Client - this to play\Tut 7 - Server\Game.cpp(40,29): warning C4244: 'argument': conversion from 'float' to 'unsigned int', possible loss of data
+  Main.cpp
+  Player.cpp
 E:\leiProject\OnlineGamingTechnology\Networked Tag Game\Client - this to play\Tut 7 - Server\Player.cpp(22,26): warning C4244: 'argument': conversion from 'float' to 'unsigned int', possible loss of data
-E:\leiProject\OnlineGamingTechnology\Networked Tag Game\Client - this to play\Tut 7 - Server\Player.cpp(97,25): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
-E:\leiProject\OnlineGamingTechnology\Networked Tag Game\Client - this to play\Tut 7 - Server\Player.cpp(101,24): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
-E:\leiProject\OnlineGamingTechnology\Networked Tag Game\Client - this to play\Tut 7 - Server\Player.cpp(105,22): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
-E:\leiProject\OnlineGamingTechnology\Networked Tag Game\Client - this to play\Tut 7 - Server\Player.cpp(109,21): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
-E:\leiProject\OnlineGamingTechnology\Networked Tag Game\Client - this to play\Tut 7 - Server\Player.cpp(117,18): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
-E:\leiProject\OnlineGamingTechnology\Networked Tag Game\Client - this to play\Tut 7 - Server\Player.cpp(121,18): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
-E:\leiProject\OnlineGamingTechnology\Networked Tag Game\Client - this to play\Tut 7 - Server\Player.cpp(125,15): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
-E:\leiProject\OnlineGamingTechnology\Networked Tag Game\Client - this to play\Tut 7 - Server\Player.cpp(129,15): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
-E:\leiProject\OnlineGamingTechnology\Networked Tag Game\Client - this to play\Tut 7 - Server\Player.cpp(137,18): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
-E:\leiProject\OnlineGamingTechnology\Networked Tag Game\Client - this to play\Tut 7 - Server\Player.cpp(141,18): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
-E:\leiProject\OnlineGamingTechnology\Networked Tag Game\Client - this to play\Tut 7 - Server\Player.cpp(145,15): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
-E:\leiProject\OnlineGamingTechnology\Networked Tag Game\Client - this to play\Tut 7 - Server\Player.cpp(149,15): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
+E:\leiProject\OnlineGamingTechnology\Networked Tag Game\Client - this to play\Tut 7 - Server\Player.cpp(96,25): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
+E:\leiProject\OnlineGamingTechnology\Networked Tag Game\Client - this to play\Tut 7 - Server\Player.cpp(100,24): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
+E:\leiProject\OnlineGamingTechnology\Networked Tag Game\Client - this to play\Tut 7 - Server\Player.cpp(104,22): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
+E:\leiProject\OnlineGamingTechnology\Networked Tag Game\Client - this to play\Tut 7 - Server\Player.cpp(108,21): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
+E:\leiProject\OnlineGamingTechnology\Networked Tag Game\Client - this to play\Tut 7 - Server\Player.cpp(116,18): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
+E:\leiProject\OnlineGamingTechnology\Networked Tag Game\Client - this to play\Tut 7 - Server\Player.cpp(120,18): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
+E:\leiProject\OnlineGamingTechnology\Networked Tag Game\Client - this to play\Tut 7 - Server\Player.cpp(124,15): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
+E:\leiProject\OnlineGamingTechnology\Networked Tag Game\Client - this to play\Tut 7 - Server\Player.cpp(128,15): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
+E:\leiProject\OnlineGamingTechnology\Networked Tag Game\Client - this to play\Tut 7 - Server\Player.cpp(136,18): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
+E:\leiProject\OnlineGamingTechnology\Networked Tag Game\Client - this to play\Tut 7 - Server\Player.cpp(140,18): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
+E:\leiProject\OnlineGamingTechnology\Networked Tag Game\Client - this to play\Tut 7 - Server\Player.cpp(144,15): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
+E:\leiProject\OnlineGamingTechnology\Networked Tag Game\Client - this to play\Tut 7 - Server\Player.cpp(148,15): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
+  SendGetMethods.cpp
+  Generating Code...
+  LINK : E:\leiProject\OnlineGamingTechnology\Networked Tag Game\Client - this to play\Debug\Tut 7 - Server.exe not found or not built by the last incremental link; performing full link
   Tut 7 - Server.vcxproj -> E:\leiProject\OnlineGamingTechnology\Networked Tag Game\Client - this to play\Debug\Tut 7 - Server.exe

@@ -180,7 +180,7 @@ void Game::update(sf::Time t_deltaTime)
 	} 
 
 	player.checkCollision(Player2.getPlayer());
-	player.checkCollision(Player3.getPlayer());
+	player.checkCollision2(Player3.getPlayer());
 
 	  
 
