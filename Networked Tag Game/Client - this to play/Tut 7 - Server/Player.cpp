@@ -14,6 +14,9 @@ void Player::init(std::string stringID)
 	{
 		std::cout << "failed loading font " << std::endl;
 	}
+	//survivalText.setFont(m_font);
+	//survivalText.setCharacterSize(70.0f);
+	//survivalText.setPosition(100, 100);
 
 	m_text.setFont(m_font);
 	m_text.setCharacterSize(70.0f);
@@ -22,51 +25,67 @@ void Player::init(std::string stringID)
 	if (playerID == 0)
 	{
 		player.setPosition(20, 100);
+		player1Alive = true;
 	}
 
 	//this is for testing with another client started on local PC
 	else if (playerID == 1)
 	{
 		player.setPosition(200, 600);
+		player2Alive = true;
+		
+
 	}
 
 	else if (playerID == 2)
 	{
 		player.setPosition(500, 300);
+		player3Alive = true;
+	
+
 	}
+
 }
 
 void Player::render(sf::RenderWindow& win)
 {
 	win.draw(player);
+	//win.draw(survivalText);
 	win.draw(m_text);
 }
 
 void Player::update()
 {
-	if (playerID == 0)
+	if (playerID == 0 && player1Alive == true)
 	{
 		playerMovement();
-		
 		setText1();
-
 	}
-
 	//this is for testing with another client started on local PC
-	else if (playerID == 1)
+	checkWalls();
+}
+
+void Player::update2()
+{
+	if(playerID == 1 && player2Alive == true)
 	{
 		player2Movement();
 		setText2();
+		//survivalText.setString("survival time: " + std::to_string(survivalTime2.asSeconds()));
 
 	}
+	checkWalls();
+}
 
-	else if (playerID == 2)
+void Player::update3()
+{
+	if (playerID == 2 && player3Alive == true)
 	{
 		player3Movement();
 		setText3();
+	//	survivalText.setString("survival time: " + std::to_string(survivalTime3.asSeconds()));
 
 	}
-
 	checkWalls();
 }
 
@@ -74,19 +93,19 @@ void Player::playerMovement()
 {
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::W))
 	{
-		player.move(0, -10);
+		player.move(0, -speed -2);
 	}
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::S))
 	{
-		player.move(0, 10);
+		player.move(0, speed +2);
 	}
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::A))
 	{
-		player.move(-10, 0);
+		player.move(-speed -2, 0);
 	}
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::D))
 	{
-		player.move(10, 0);
+		player.move(speed +2, 0);
 	}
 }
 
@@ -94,19 +113,19 @@ void Player::player2Movement()
 {
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up))
 	{
-		player.move(0, -10);
+		player.move(0, -speed);
 	}
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Down))
 	{
-		player.move(0, 10);
+		player.move(0, speed);
 	}
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left))
 	{
-		player.move(-10, 0);
+		player.move(-speed, 0);
 	}
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right))
 	{
-		player.move(10, 0);
+		player.move(speed, 0);
 	}
 }
 
@@ -114,19 +133,19 @@ void Player::player3Movement()
 {
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::I))
 	{
-		player.move(0, -10);
+		player.move(0, -speed);
 	}
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::K))
 	{
-		player.move(0, 10);
+		player.move(0, speed);
 	}
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::J))
 	{
-		player.move(-10, 0);
+		player.move(-speed, 0);
 	}
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::L))
 	{
-		player.move(10, 0);
+		player.move(speed, 0);
 	}
 }
 
@@ -154,21 +173,22 @@ void Player::checkWalls()
 
 void Player::setText1()
 {
-	m_text.setString("Your Colour is Green");
+	m_text.setString("You are chaser");
 
 }
 
 void Player::setText2()
 {
-	m_text.setString("Your Colour is Blue");
+	m_text.setString("You are not chaser");
 
 }
 
 void Player::setText3()
 {
-	m_text.setString("Your Colour is Magenta");
+	m_text.setString("You are not chaser");
 
 }
+
 //This Method is checking for collision between players
 void Player::checkCollision(sf::RectangleShape opponent)
 {
@@ -177,7 +197,28 @@ void Player::checkCollision(sf::RectangleShape opponent)
 		player.setFillColor(sf::Color::Yellow);
 		std::cout << "Player: " << getPlayerID() << "is colliding" << std::endl;
 		isColliding = true;
-		
+		player2Alive = false;
+	}
+
+	else
+	{
+		player.setFillColor(color);
+		isColliding = false;
+	}
+}
+
+
+
+//This Method is checking for collision between players
+void Player::checkCollision2(sf::RectangleShape opponent)
+{
+	if (player.getGlobalBounds().intersects(opponent.getGlobalBounds()))
+	{
+		player.setFillColor(sf::Color::Yellow);
+		std::cout << "Player: " << getPlayerID() << "is colliding" << std::endl;
+		isColliding = true;
+		player3Alive = false;
+
 	}
 
 	else

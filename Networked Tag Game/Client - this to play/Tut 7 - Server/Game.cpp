@@ -64,6 +64,11 @@ void Game::run()
 	sf::Time timeSinceLastUpdate = sf::Time::Zero;
 	const float fps{ 60.0f };
 	sf::Time timePerFrame = sf::seconds(1.0f / fps); // 60 fps
+	Timer.restart();
+	//player.survivalClock1.restart();
+	//Player2.survivalClock2.restart();
+	//Player3.survivalClock3.restart();
+
 	while (m_window.isOpen())
 	{
 		processEvents(); // as many as possible
@@ -73,10 +78,19 @@ void Game::run()
 			timeSinceLastUpdate -= timePerFrame;
 			processEvents(); // at least 60 fps
 			update(timePerFrame); //60 fps
+
 			if (timerAlive == true)
 			{
 				timer2 = Timer.getElapsedTime();
 			}
+	/*		if (Player2.player2Alive == true)
+			{
+				Player2.survivalTime2 = Player2.survivalClock2.getElapsedTime();
+			}
+			if (Player3.player3Alive == true)
+			{
+				Player3.survivalTime3 = Player3.survivalClock3.getElapsedTime();
+			}*/
 		}
 		render(); // as many as possible
 	}
@@ -151,16 +165,30 @@ void Game::update(sf::Time t_deltaTime)
 	{
 		player.init(myClient.getID_Message());
 	}
-	if (timerAlive == true)
-	{
-		player.update();
-	}
-	player.checkCollision(Player2.getPlayer());
-	if (player.CheckForCollision() =="1")
-	{
-		timerAlive = false;
 
+	player.update();
+
+
+	if (player.player2Alive == true)
+	{
+		player.update2();
 	}
+
+	if (player.player3Alive == true)
+	{
+		player.update3();
+	} 
+
+	player.checkCollision(Player2.getPlayer());
+	player.checkCollision(Player3.getPlayer());
+
+	  
+
+	//if (Player2.CheckForCollision() =="1")
+	//{
+	//	timerAlive = false;
+
+	//}
 
 	if (numberOfPlayer == 4)
 	{
@@ -202,8 +230,12 @@ void Game::update(sf::Time t_deltaTime)
 		Player3.init(opponentPosPlayer3[0]);
 		std::cout << Player3.getPlayerID() << std::endl;
 	}
+
 	timerText.setString("survival time: " + std::to_string(timer2.asSeconds()));
-	
+
+	//Player2.survivalText.setString("survival time: " + std::to_string(Player2.survivalTime2.asSeconds()));
+	//Player3.survivalText.setString("survival time: " + std::to_string(Player3.survivalTime3.asSeconds()));
+
 
 }
 
@@ -215,6 +247,8 @@ void Game::render()
 	m_window.clear(sf::Color::Black);
 	m_window.draw(tileSprite);
 	m_window.draw(timerText);
+//	m_window.draw(Player2.survivalText);
+	//m_window.draw(Player3.survivalText);
 	player.render(m_window);
 	Player2.render(m_window);
 	Player3.render(m_window);
