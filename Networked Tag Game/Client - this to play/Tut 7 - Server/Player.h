@@ -38,10 +38,12 @@ public:
 	std::string getPlayerPosition();
 	std::string getChecked();
 	std::string CheckForCollision();
+
+
+
 	bool player1Alive = false;
 	bool player2Alive = false;
 	bool player3Alive = false;
-	
 
 	//sf::Clock survivalClock1;
 	//sf::Clock survivalClock2;
@@ -53,11 +55,12 @@ public:
 
 	//sf::Text survivalText;
 
+	sf::Text m_text;
+
 private:
 
 	sf::RectangleShape player;
 	sf::Color color;
-	sf::Text m_text;
 	sf::Font m_font;
 	int playerID = -1;
 

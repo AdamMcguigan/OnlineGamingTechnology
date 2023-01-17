@@ -22,6 +22,8 @@ void Player::init(std::string stringID)
 	m_text.setCharacterSize(70.0f);
 	m_text.setPosition(10, 10);
 
+
+
 	if (playerID == 0)
 	{
 		player.setPosition(20, 100);
@@ -41,9 +43,10 @@ void Player::init(std::string stringID)
 	{
 		player.setPosition(500, 300);
 		player3Alive = true;
-	
+		
 
 	}
+
 
 }
 
@@ -51,7 +54,11 @@ void Player::render(sf::RenderWindow& win)
 {
 	win.draw(player);
 	//win.draw(survivalText);
+
 	win.draw(m_text);
+
+
+
 }
 
 void Player::update()
@@ -78,8 +85,11 @@ void Player::update2()
 		player3Movement();
 		setText3();
 		//	survivalText.setString("survival time: " + std::to_string(survivalTime3.asSeconds()));
-
 	}
+
+
+
+
 	checkWalls();
 }
 

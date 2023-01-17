@@ -51,9 +51,13 @@ private:
 
 	sf::Clock Timer;
 	sf::Time timer2;
+	sf::Time timer3;
 	sf::Font m_font;
 	sf::Text timerText;
 	bool timerAlive = false;
+
+	sf::Text winText;
+
 
 	Client myClient;
 

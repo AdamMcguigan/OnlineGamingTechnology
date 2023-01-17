@@ -40,6 +40,10 @@ Game::Game() :
 	timerText.setCharacterSize(70.0f);
 	timerText.setPosition(100, 100);
 	
+
+	winText.setFont(m_font);
+	winText.setCharacterSize(70.0f);
+	winText.setPosition(300, 300);
 }
 
 /// <summary>
@@ -84,6 +88,10 @@ void Game::run()
 				if (player.player2Alive == true)
 				{
 					timer2 = Timer.getElapsedTime();
+				}
+				if (player.player3Alive == true)
+				{
+					timer3 = Timer.getElapsedTime();
 				}
 			}
 	/*		if (Player2.player2Alive == true)
@@ -231,9 +239,36 @@ void Game::update(sf::Time t_deltaTime)
 		Player3.init(opponentPosPlayer3[0]);
 		std::cout << Player3.getPlayerID() << std::endl;
 	}
+	if (player.player2Alive == true)
+	{
+		timerText.setString("survival time: " + std::to_string(timer2.asSeconds()));
+	}
+	if (player.player3Alive == true)
+	{
+		timerText.setString("survival time: " + std::to_string(timer3.asSeconds()));
+	}
 
-	timerText.setString("survival time: " + std::to_string(timer2.asSeconds()));
 
+	if (player.player2Alive == false && player.player3Alive == false && numberOfPlayer >= 3)
+	{
+		//player.enableWinText = true;
+		if (player.getPlayerID() == 0&& player.player1Alive == false)
+		{
+			winText.setString("You Won");
+		}
+		if (player.getPlayerID() == 1)
+		{
+			winText.setString("You lost");
+		}
+		if (player.getPlayerID() == 2)
+		{
+			winText.setString("You lost");
+		}
+		//player.m_text1.setString("You won");
+	}
+	else {
+		//player.m_text1.setString("");
+	}
 	//Player2.survivalText.setString("survival time: " + std::to_string(Player2.survivalTime2.asSeconds()));
 	//Player3.survivalText.setString("survival time: " + std::to_string(Player3.survivalTime3.asSeconds()));
 
@@ -253,6 +288,9 @@ void Game::render()
 	player.render(m_window);
 	Player2.render(m_window);
 	Player3.render(m_window);
+
+	m_window.draw(winText);
+
 	m_window.display();
 }
 
