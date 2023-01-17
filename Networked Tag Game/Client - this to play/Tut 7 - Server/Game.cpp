@@ -81,7 +81,10 @@ void Game::run()
 
 			if (timerAlive == true)
 			{
-				timer2 = Timer.getElapsedTime();
+				if (player.player2Alive == true)
+				{
+					timer2 = Timer.getElapsedTime();
+				}
 			}
 	/*		if (Player2.player2Alive == true)
 			{
