@@ -67,11 +67,17 @@ void Player::update()
 
 void Player::update2()
 {
-	if(playerID == 1 && player2Alive == true)
+	if(player2Alive == true)
 	{
 		player2Movement();
 		setText2();
 		//survivalText.setString("survival time: " + std::to_string(survivalTime2.asSeconds()));
+	}
+	if (player3Alive == true)
+	{
+		player3Movement();
+		setText3();
+		//	survivalText.setString("survival time: " + std::to_string(survivalTime3.asSeconds()));
 
 	}
 	checkWalls();
@@ -79,7 +85,7 @@ void Player::update2()
 
 void Player::update3()
 {
-	if (playerID == 2 && player3Alive == true)
+	if (playerID == 1 && player3Alive == true)
 	{
 		player3Movement();
 		setText3();

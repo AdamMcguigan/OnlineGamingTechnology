@@ -172,15 +172,13 @@ void Game::update(sf::Time t_deltaTime)
 	player.update();
 
 
-	if (player.player2Alive == true)
-	{
-		player.update2();
-	}
+	
+	player.update2();
+	
 
-	if (player.player3Alive == true)
-	{
-		player.update3();
-	} 
+	
+//	player.update3();
+	
 
 	player.checkCollision(Player2.getPlayer());
 	player.checkCollision2(Player3.getPlayer());
@@ -193,7 +191,7 @@ void Game::update(sf::Time t_deltaTime)
 
 	//}
 
-	if (numberOfPlayer == 4)
+	if (numberOfPlayer == 3)
 	{
 		Player2.setPosition(getPosFromServer(myClient.getPositionMessage(), true));
 		Player3.setPosition(getPosFromServer(myClient.getPositionMessage(), false));

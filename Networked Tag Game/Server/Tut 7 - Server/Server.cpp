@@ -48,7 +48,7 @@ bool Server::ListenForNewConnection()
 		Connections[TotalConnections] = newConnection; //Set socket in array to be the newest connection before creating the thread to handle this client's socket.
 		CreateThread(NULL, NULL, (LPTHREAD_START_ROUTINE)ClientHandlerThread, (LPVOID)(TotalConnections), NULL, NULL); //Create Thread to handle this client. The index in the socket array for this thread is the value (i).
 		std::string MOTD = "Welcome ! You are player " + std::to_string(TotalConnections);
-		//SendString(TotalConnections, MOTD);
+		SendString(TotalConnections, MOTD);
 		SendPlayerID(TotalConnections, std::to_string(TotalConnections));
 		TotalConnections += 1; //Incremenent total # of clients that have connected
 		playerNum = TotalConnections;
