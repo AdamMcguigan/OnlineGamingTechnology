@@ -1,3 +1,1 @@
-﻿  Server.cpp
-C:\Users\adamm\Desktop\Online Gaming Technology\OnlineGamingTechnology\Networked Tag Game\Server\Tut 7 - Server\Server.cpp(149,12): warning C4244: 'argument': conversion from 'time_t' to 'unsigned int', possible loss of data
-  Tut 7 - Server.vcxproj -> C:\Users\adamm\Desktop\Online Gaming Technology\OnlineGamingTechnology\Networked Tag Game\Server\Debug\Tut 7 - Server.exe
+﻿  Tut 7 - Server.vcxproj -> E:\leiProject\OnlineGamingTechnology\Networked Tag Game\Server\Debug\Tut 7 - Server.exe

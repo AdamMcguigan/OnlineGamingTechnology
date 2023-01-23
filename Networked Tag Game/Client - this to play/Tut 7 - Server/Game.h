@@ -4,7 +4,8 @@
 #include <SFML/Graphics.hpp>
 #include "Player.h"
 #include "Client.h"
-
+#include "Globals.h"
+#include "MainMenu.h"
 class Game
 {
 public:
@@ -16,7 +17,8 @@ public:
 	void run(Client& t_client);
 	void assignPlayer(int t_playerID);
 private:
-
+	MainMenu m_mainMenu;
+	int gameMode;
 	void processEvents();
 	void processKeys(sf::Event t_event);
 	void update(sf::Time t_deltaTime);

@@ -15,7 +15,8 @@ Game::Game() :
 	m_exitGame{ false } //when true game will exit
 {
 	setupFontAndText(); // load font 
-
+	gameMode = 1;
+	m_mainMenu.initialise(m_font);		//passing custom font for the menu buttons
 }
 
 /// <summary>
@@ -154,70 +155,76 @@ void Game::processKeys(sf::Event t_event)
 /// <param name="t_deltaTime">time interval per frame</param>
 void Game::update(sf::Time t_deltaTime)
 {
-	//Checking if the client is ready to play and time is less than 60
-	if (m_client->readyToPlay == true && m_resetCounter < 60)
+	if (gameMode == MENU)
 	{
-		survivalClock.restart();
-		m_resetCounter++;
+		m_mainMenu.update(m_window, gameMode);
 	}
-
-	if (m_client->readyToPlay == true)
+	else if (gameMode == PLAY)
 	{
-		survivalTime = survivalClock.getElapsedTime();
-
-		if (isPlayerOneSet)
+		//Checking if the client is ready to play and time is less than 60
+		if (m_client->readyToPlay == true && m_resetCounter < 60)
 		{
-			m_playerOne.update(t_deltaTime, survivalTime);
-			m_playerTwo.m_playerShape.setPosition(m_client->playerTwoPos);
-			m_playerThree.m_playerShape.setPosition(m_client->playerThreePos);
+			survivalClock.restart();
+			m_resetCounter++;
 		}
 
-		if (isPlayerTwoSet)
+		if (m_client->readyToPlay == true)
 		{
-			m_playerTwo.update(t_deltaTime, survivalTime);
-			m_playerOne.m_playerShape.setPosition(m_client->playerOnePos);
-			m_playerThree.m_playerShape.setPosition(m_client->playerThreePos);
+			survivalTime = survivalClock.getElapsedTime();
+
+			if (isPlayerOneSet)
+			{
+				m_playerOne.update(t_deltaTime, survivalTime);
+				m_playerTwo.m_playerShape.setPosition(m_client->playerTwoPos);
+				m_playerThree.m_playerShape.setPosition(m_client->playerThreePos);
+			}
+
+			if (isPlayerTwoSet)
+			{
+				m_playerTwo.update(t_deltaTime, survivalTime);
+				m_playerOne.m_playerShape.setPosition(m_client->playerOnePos);
+				m_playerThree.m_playerShape.setPosition(m_client->playerThreePos);
+			}
+
+			if (isPlayerThreeSet)
+			{
+				m_playerThree.update(t_deltaTime, survivalTime);
+				m_playerOne.m_playerShape.setPosition(m_client->playerOnePos);
+				m_playerTwo.m_playerShape.setPosition(m_client->playerTwoPos);
+			}
+
+			//Checking if player one is the chaser
+			if (m_client->chasePlayerNumber == 1)
+			{
+				m_playerOne.m_playerShape.setFillColor(sf::Color::Red);
+			}
+
+			//Checking if player two is the chaser
+			if (m_client->chasePlayerNumber == 2)
+			{
+				m_playerTwo.m_playerShape.setFillColor(sf::Color::Red);
+			}
+
+			//Checking if player three is the chaser
+			if (m_client->chasePlayerNumber == 3)
+			{
+				m_playerThree.m_playerShape.setFillColor(sf::Color::Red);
+			}
+
+			m_resetCounter++;
+
+			//set collisions active after 5 seconds of game time 
+			if (survivalClock.getElapsedTime().asSeconds() > 5)
+			{
+				checkForCollisions();
+			}
+
+			m_chasePlayerText.setString("Red is the chaser\nTime elapsed: " + std::to_string(survivalClock.getElapsedTime().asSeconds()));
+
+
+
 		}
-
-		if (isPlayerThreeSet)
-		{
-			m_playerThree.update(t_deltaTime, survivalTime);
-			m_playerOne.m_playerShape.setPosition(m_client->playerOnePos);
-			m_playerTwo.m_playerShape.setPosition(m_client->playerTwoPos);
-		}
-
-		//Checking if player one is the chaser
-		if (m_client->chasePlayerNumber == 1)
-		{
-			m_playerOne.m_playerShape.setFillColor(sf::Color::Red);
-		}
-
-		//Checking if player two is the chaser
-		if (m_client->chasePlayerNumber == 2)
-		{
-			m_playerTwo.m_playerShape.setFillColor(sf::Color::Red);
-		}
-
-		//Checking if player three is the chaser
-		if (m_client->chasePlayerNumber == 3)
-		{
-			m_playerThree.m_playerShape.setFillColor(sf::Color::Red);
-		}
-
-		m_resetCounter++;
-
-		//set collisions active after 5 seconds of game time 
-		if (survivalClock.getElapsedTime().asSeconds() > 5)
-		{
-			checkForCollisions();
-		}
-
-		m_chasePlayerText.setString("Red is the chaser\nTime elapsed: " + std::to_string(survivalClock.getElapsedTime().asSeconds()));
-
-		
-
 	}
-
 
 	if (m_exitGame)
 	{
@@ -230,24 +237,37 @@ void Game::update(sf::Time t_deltaTime)
 /// </summary>
 void Game::render()
 {
-	m_window.clear(sf::Color::Black);
 
-	//Drawing background and chase text
-	m_window.draw(tileSprite);
-	m_window.draw(m_chasePlayerText);
-
-	//Drawing players
-	m_playerOne.render(m_window);
-	m_playerTwo.render(m_window);
-	m_playerThree.render(m_window);
-
-	//Drawing the survival times for each player
-	for (int i = 0; i < 3; i++)
+	if (gameMode == MENU)
 	{
-		m_window.draw(m_SurvivalTime[i]);
+		m_window.clear(sf::Color{ 212, 159, 15 });
+
+		m_mainMenu.draw(m_window);
+		m_window.display();
+
+	}
+	else if (gameMode == PLAY)
+	{
+		m_window.clear(sf::Color::Black);
+
+		//Drawing background and chase text
+		m_window.draw(tileSprite);
+		m_window.draw(m_chasePlayerText);
+
+		//Drawing players
+		m_playerOne.render(m_window);
+		m_playerTwo.render(m_window);
+		m_playerThree.render(m_window);
+
+		//Drawing the survival times for each player
+		for (int i = 0; i < 3; i++)
+		{
+			m_window.draw(m_SurvivalTime[i]);
+		}
+		m_window.display();
+
 	}
 
-	m_window.display();
 }
 
 /// <summary>
