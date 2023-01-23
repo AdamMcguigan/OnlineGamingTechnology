@@ -1,54 +1,31 @@
 #pragma once
 #include <SFML/Graphics.hpp>
-#include <string.h>
-#include <iostream>
-#include <sstream>
-
+#include "Client.h"
 class Player
 {
 public:
+	Player();
+	~Player();
 
-	void init(std::string stringID);
-	void render(sf::RenderWindow& win);
-	void update();
-		
-	void playerMovement();
-	void player2Movement();
-	void player3Movement();
-	void checkCollision(sf::RectangleShape opponent);
+	void playerMovement(sf::Event t_event, Client* t_client);
+	void checkForChasePlayer();
+	void CheckForPlayWalls();
 
-	void setPlayerID(int ID);
-	void setPosition(sf::Vector2f newPos);
-	void setPlayerColor();
-	void setText1();
-	void setText2();
-	void setText3();
-	void checkWalls();
-	sf::RectangleShape getPlayer();
+	void update(sf::Time t_deltaTime, sf::Time t_deathTime);
+	void render(sf::RenderWindow& m_window);
 
-	bool isIDSet();
+	int m_playerId = 0;
 
-	int convertStringToID(std::string stringID);
-	int getPlayerID();
+	bool m_isChasePlayerSet = false;
+	bool m_isPlayerAlive = true;
 
-	std::string getPlayerPosition();
-	std::string getChecked();
-	std::string CheckForCollision();
+	sf::RectangleShape m_playerShape;
 
-	
 private:
+	void displaySurvivalTime(sf::Time t_time);
 
-	sf::RectangleShape player;
-	sf::Color color;
-	sf::Text m_text;
-	sf::Font m_font;
-	int playerID = -1;
-
-	bool isColliding = false;
-	bool IDSet = false;
-
-
+	bool m_timeDisplayed = false;
+	float m_speed = 10.0f;
 
 };
-
 

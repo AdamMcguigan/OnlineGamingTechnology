@@ -1,5 +1,6 @@
 #include "Client.h"
 
+
 bool Client::ProcessPacket(Packet _packettype)
 {
 	switch (_packettype)
@@ -9,34 +10,62 @@ bool Client::ProcessPacket(Packet _packettype)
 		std::string Message; //string to store our message we received
 		if (!GetString(Message)) //Get the chat message and store it in variable: Message
 			return false; //If we do not properly get the chat message, return false
+		//Checking for a message from server to start game
+		if (Message == "PlayGame")
+		{
+			readyToPlay = true;
+		}
+
 		std::cout << Message << std::endl; //Display the message to the user
+		//setting players ID for chase player
+		if (Message == "1")
+		{
+			chasePlayerNumber = 1;
+		}
+
+		//setting players ID for chase player
+		else if (Message == "2")
+		{
+			chasePlayerNumber = 2;
+		}
+
+		//setting players ID for chase player
+		else if (Message == "3")
+		{
+			chasePlayerNumber = 3;
+		}
 		break;
 	}
-	case P_Position:
+	case P_Id:
 	{
-		std::string Message; //string to store our message we received
-		if (!GetString(Message)) //Get the chat message and store it in variable: Message
-			return false; //If we do not properly get the chat message, return false
-		setPositionMessage(Message);
-		//std::cout << Message << std::endl; //Display the message to the user
+		int id = 9999;
+		GetInt(id);
+		m_playerId = id;
+		std::cout << "Player ID: " << m_playerId << std::endl;
 		break;
 	}
-	case P_PlayerID:
+	case P_Position2f:
 	{
-		std::string Message; //string to store our message we received
-		if (!GetString(Message)) //Get the chat message and store it in variable: Message
-			return false; //If we do not properly get the chat message, return false
-		setID_Message(Message);
-		//std::cout << Message << std::endl; //Display the message to the user
-		break;
-	}
-	case P_NumberOfPlayer:
-	{
-		std::string Message; //string to store our message we received
-		if (!GetString(Message)) //Get the chat message and store it in variable: Message
-			return false; //If we do not properly get the chat message, return false
-		setPlayerNum(Message);
-		//std::cout << Message << std::endl; //Display the message to the user
+		int id = 9999;
+		sf::Vector2f vector;
+		if (!GetPosition(id, vector))
+			return false;
+
+		switch (id)
+		{
+		case 0:
+			playerOnePos = vector;
+			break;
+		case 1:
+			playerTwoPos = vector;
+			break;
+		case 2:
+			playerThreePos = vector;
+			break;
+		default:
+			break;
+		}
+
 		break;
 	}
 	default: //If packet type is not accounted for
@@ -110,4 +139,27 @@ bool Client::CloseConnection()
 		return false;
 	}
 	return true;
+}
+
+//Method used to grab values from a string
+std::vector<std::string> Client::splitString(std::string string)
+{
+	std::string s = "";
+	std::vector<std::string> t_values;
+
+	for (auto x : string)
+	{
+		if (x == ',')
+		{
+			t_values.push_back(s);
+			s = "";
+		}
+		else {
+			s = s + x;
+		}
+	}
+
+	t_values.push_back(s);
+	return t_values;
+
 }

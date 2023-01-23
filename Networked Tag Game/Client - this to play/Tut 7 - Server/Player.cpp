@@ -1,269 +1,119 @@
 #include "Player.h"
+#include <iostream>
 
-void Player::init(std::string stringID)
+//Player Constructor
+Player::Player()
 {
-	setPlayerID(convertStringToID(stringID));
+	m_playerShape.setSize(sf::Vector2f(50, 50));
 
-	setPlayerColor();
+	srand(time(NULL));
 
-	player.setSize(sf::Vector2f(50, 50));
-	player.setPosition(sf::Vector2f(20, 100));
+	int randX = rand() % 800 + 1;
+	int randY = rand() % 800 + 1;
 
+	m_playerShape.setPosition(randX, randY);
 
-	if (!m_font.loadFromFile("ASSETS/FONTS/Pixellari.ttf"))
-	{
-		std::cout << "failed loading font " << std::endl;
-	}
-
-	m_text.setFont(m_font);
-	m_text.setCharacterSize(70.0f);
-	m_text.setPosition(10, 10);
-
-	if (playerID == 0)
-	{
-		player.setPosition(20, 100);
-	}
-
-	//this is for testing with another client started on local PC
-	else if (playerID == 1)
-	{
-		player.setPosition(200, 600);
-	}
-
-	else if (playerID == 2)
-	{
-		player.setPosition(500, 300);
-	}
-}
-
-void Player::render(sf::RenderWindow& win)
-{
-	win.draw(player);
-	win.draw(m_text);
-}
-
-void Player::update()
-{
-	if (playerID == 0)
-	{
-		playerMovement();
-		
-		setText1();
-
-	}
-
-	//this is for testing with another client started on local PC
-	else if (playerID == 1)
-	{
-		player2Movement();
-		setText2();
-
-	}
-
-	else if (playerID == 2)
-	{
-		player3Movement();
-		setText3();
-
-	}
-
-	checkWalls();
-}
-
-void Player::playerMovement()
-{
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::W))
-	{
-		player.move(0, -10);
-	}
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::S))
-	{
-		player.move(0, 10);
-	}
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::A))
-	{
-		player.move(-10, 0);
-	}
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::D))
-	{
-		player.move(10, 0);
-	}
-}
-
-void Player::player2Movement()
-{
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up))
-	{
-		player.move(0, -10);
-	}
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Down))
-	{
-		player.move(0, 10);
-	}
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left))
-	{
-		player.move(-10, 0);
-	}
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right))
-	{
-		player.move(10, 0);
-	}
-}
-
-void Player::player3Movement()
-{
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::I))
-	{
-		player.move(0, -10);
-	}
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::K))
-	{
-		player.move(0, 10);
-	}
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::J))
-	{
-		player.move(-10, 0);
-	}
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::L))
-	{
-		player.move(10, 0);
-	}
-}
-
-void Player::checkWalls()
-{
-	if (player.getPosition().x > 880 + player.getSize().x)
-	{
-		player.setPosition(0 - player.getSize().x,player.getPosition().y);
-	}
-	if (player.getPosition().x < 0 - player.getSize().x)
-	{
-		player.setPosition(880 + player.getSize().x, player.getPosition().y);
-	}
-	if (player.getPosition().y < 0 - player.getSize().y)
-	{
-		player.setPosition(player.getPosition().x, 880 + player.getSize().y);
-	}
-	if (player.getPosition().y > 880 + player.getSize().y)
-	{
-		player.setPosition(player.getPosition().x, 0 - player.getSize().y);
-	}
-
+	m_playerShape.setFillColor(sf::Color::Magenta);
+	m_playerShape.setOutlineColor(sf::Color::Black);
+	m_playerShape.setOutlineThickness(1.0f);
 
 }
 
-void Player::setText1()
+Player::~Player()
 {
-	m_text.setString("Your Colour is Green");
-
 }
 
-void Player::setText2()
+//Player Movement - All movement handled on WASD
+void Player::playerMovement(sf::Event t_event, Client* t_client)
 {
-	m_text.setString("Your Colour is Blue");
-
-}
-
-void Player::setText3()
-{
-	m_text.setString("Your Colour is Magenta");
-
-}
-//This Method is checking for collision between players
-void Player::checkCollision(sf::RectangleShape opponent)
-{
-	if (player.getGlobalBounds().intersects(opponent.getGlobalBounds()))
+	if (sf::Keyboard::W == t_event.key.code)
 	{
-		player.setFillColor(sf::Color::Yellow);
-		std::cout << "Player: " << getPlayerID() << "is colliding" << std::endl;
-		isColliding = true;
-		
+		m_playerShape.move(0, -m_speed);
 	}
 
-	else
+	if (sf::Keyboard::S == t_event.key.code)
 	{
-		player.setFillColor(color);
-		isColliding = false;
+		m_playerShape.move(0, m_speed);
+	}
+
+	if (sf::Keyboard::A == t_event.key.code)
+	{
+		m_playerShape.move(-m_speed, 0);
+	}
+
+	if (sf::Keyboard::D == t_event.key.code)
+	{
+		m_playerShape.move(m_speed, 0);
+	}
+
+	t_client->SendPosition(1, m_playerShape.getPosition());
+}
+
+//Check if the player is set to the Chase player
+void Player::checkForChasePlayer()
+{
+	if (m_isChasePlayerSet == true)
+	{
+		m_playerShape.setFillColor(sf::Color::Red);
+		m_playerShape.setPosition(380, 380);
+		m_speed = 9.0f;
 	}
 }
 
-//This Get Method is returning the players body or rectangle shape.
-sf::RectangleShape Player::getPlayer()
+//Checking the play area so that the player loops back around
+void Player::CheckForPlayWalls()
 {
-	return player;
-}
-
-//This method returns a string of the current players X and Y positions
-std::string Player::getPlayerPosition()
-{
-	return std::to_string(getPlayerID()) + "," + std::to_string(player.getPosition().x) + "," + std::to_string(player.getPosition().y);
-}
-
-//String method to return if collision happened or not
-std::string Player::CheckForCollision()
-{
-	return std::to_string(isColliding); // 1 is colliding , 0 is not 
-}
-
-//Set method to set the players position
-void Player::setPosition(sf::Vector2f newPos)
-{
-	player.setPosition(newPos);
-}
-
-//Method to set the players colors as they join
-void Player::setPlayerColor()
-{
-	switch (playerID)
+	if (m_playerShape.getPosition().x > 880 + m_playerShape.getSize().x)
 	{
-	case 0:
-		color = sf::Color::Green;
-		break;
-	case 1:
-		color = sf::Color::Blue;
-		break;
-	case 2:
-		color = sf::Color::Magenta;
-		break;
-	default:
-		color = sf::Color::Red;
-		break;
+		m_playerShape.setPosition(0 - m_playerShape.getSize().x, m_playerShape.getPosition().y);
 	}
 
-	player.setFillColor(color);
+	if (m_playerShape.getPosition().x < 0 - m_playerShape.getSize().x)
+	{
+		m_playerShape.setPosition(880 + m_playerShape.getSize().x, m_playerShape.getPosition().y);
+	}
+
+	if (m_playerShape.getPosition().y < 0 - m_playerShape.getSize().y)
+	{
+		m_playerShape.setPosition(m_playerShape.getPosition().x, 880 + m_playerShape.getSize().y);
+	}
+
+	if (m_playerShape.getPosition().y > 880 + m_playerShape.getSize().y)
+	{
+		m_playerShape.setPosition(m_playerShape.getPosition().x, 0 - m_playerShape.getSize().y);
+	}
+	
 }
 
-//Method to set the players ID and to set their color
-void Player::setPlayerID(int ID)
+//Update - Check for boundaries and if the player is caught, display the surived time
+void Player::update(sf::Time t_deltaTime, sf::Time t_deathTime)
 {
-	playerID = ID;
-	setPlayerColor();
-	IDSet = true;
+	if (m_isPlayerAlive)
+	{
+		CheckForPlayWalls();
+
+	}
+
+	if (m_timeDisplayed == false)
+	{
+		if (m_isPlayerAlive == false)
+		{
+			displaySurvivalTime(t_deathTime);
+		}
+	}
 }
 
-//Returns the players ID 
-int Player::getPlayerID()
+void Player::render(sf::RenderWindow& m_window)
 {
-	return playerID;
+	m_window.draw(m_playerShape);
 }
 
-//Method to change parameters in a string to an ID
-int Player::convertStringToID(std::string stringID)
+void Player::displaySurvivalTime(sf::Time t_time)
 {
-	std::istringstream stream(stringID);
-	int result;
-	stream >> result;
-	return result;
+	m_timeDisplayed = true;
+	std::cout << "player died at 9" << t_time.asSeconds() << std::endl;
 }
 
-bool Player::isIDSet()
-{
-	return IDSet;
-}
 
-std::string Player::getChecked()
-{
-	return std::to_string(10);
-}
 
 

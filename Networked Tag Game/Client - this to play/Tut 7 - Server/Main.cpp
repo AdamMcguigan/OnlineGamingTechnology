@@ -21,8 +21,18 @@ Date: December 2022
 
 int main()
 {
+	Client myClient("127.0.0.1", 623); //Create client to localhost ("127.0.0.1") on port 623
+
+	if (!myClient.Connect()) //If client fails to connect...
+	{
+		std::cout << "Failed to connect to server..." << std::endl;
+		system("pause");
+		return 1;
+	}
+
 	Game game;
-	game.run();
+	game.assignPlayer(myClient.m_playerId);
+	game.run(myClient);
 
 	return 0;
 }

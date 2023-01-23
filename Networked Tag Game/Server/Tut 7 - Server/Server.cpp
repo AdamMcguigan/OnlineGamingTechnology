@@ -47,11 +47,10 @@ bool Server::ListenForNewConnection()
 		std::cout << "Client Connected! ID:" << TotalConnections << std::endl;
 		Connections[TotalConnections] = newConnection; //Set socket in array to be the newest connection before creating the thread to handle this client's socket.
 		CreateThread(NULL, NULL, (LPTHREAD_START_ROUTINE)ClientHandlerThread, (LPVOID)(TotalConnections), NULL, NULL); //Create Thread to handle this client. The index in the socket array for this thread is the value (i).
-		std::string MOTD = "Welcome ! You are player " + std::to_string(TotalConnections);
-		//SendString(TotalConnections, MOTD);
-		SendPlayerID(TotalConnections, std::to_string(TotalConnections));
+		std::string MOTD = "MOTD: Welcome! This is the message of the day!.";
+		SendString(TotalConnections, MOTD);
+		SendId(TotalConnections);
 		TotalConnections += 1; //Incremenent total # of clients that have connected
-		playerNum = TotalConnections;
 		return true;
 	}
 }
@@ -60,76 +59,101 @@ bool Server::ProcessPacket(int ID, Packet _packettype)
 {
 	switch (_packettype)
 	{
-		case P_ChatMessage: //Packet Type: chat message
+	case P_ChatMessage: //Packet Type: chat message
+	{
+		std::string Message; //string to store our message we received
+		if (!GetString(ID, Message)) //Get the chat message and store it in variable: Message
+			return false; //If we do not properly get the chat message, return false
+		//Next we need to send the message out to each user
+		for (int i = 0; i < TotalConnections; i++)
 		{
-			std::string Message; //string to store our message we received
-			if (!GetString(ID, Message)) //Get the chat message and store it in variable: Message
-				return false; //If we do not properly get the chat message, return false
-							  //Next we need to send the message out to each user
-			for (int i = 0; i < TotalConnections; i++)
+			if (i == ID) //If connection is the user who sent the message...
+				continue;//Skip to the next user since there is no purpose in sending the message back to the user who sent it.
+			if (!SendString(i, Message)) //Send message to connection at index i, if message fails to be sent...
 			{
-				if (i == ID) //If connection is the user who sent the message...
-					continue;//Skip to the next user since there is no purpose in sending the message back to the user who sent it.
-				if (!SendString(i, Message)) //Send message to connection at index i, if message fails to be sent...
-				{
-					std::cout << "Failed to send message from client ID: " << ID << " to client ID: " << i << std::endl;
-					std::cout << "Chat"<< std::endl;
-				}
+				std::cout << "Failed to send message from client ID: " << ID << " to client ID: " << i << std::endl;
 			}
-			
-			break;
 		}
-		case P_Position: //Packet Type: position
+		std::cout << "Processed chat message packet from user ID: " << ID << std::endl;
+		break;
+	}
+	case P_Vector2f:
+	{
+		sf::Vector2f vector; //string to store our message we received
+		int IDTwo = -2;
+		if (!GetVector(ID, vector, IDTwo)) //Get the chat message and store it in variable: Message
+			return false; //If we do not properly get the chat message, return false
+		//Next we need to send the message out to each user
+		for (int i = 0; i < TotalConnections; i++)
 		{
-			std::string Message; //string to store our message we received
-			if (!GetString(ID, Message)) //Get the chat message and store it in variable: Message
-				return false; //If we do not properly get the chat message, return false
-							  //Next we need to send the message out to each user
-			for (int i = 0; i < TotalConnections; i++)
-			{
-				if (i == ID) //If connection is the user who sent the message...
-					continue;//Skip to the next user since there is no purpose in sending the message back to the user who sent it.
-				if (!SendPosition(i, Message)) //Send message to connection at index i, if message fails to be sent...
-				{
-					std::cout << "Failed to send message from client ID: " << ID << " to client ID: " << i << std::endl;
-					std::cout << "Position" << std::endl;
-				}
-			}
+			if (i == ID) //If connection is the user who sent the message...
+				continue;//Skip to the next user since there is no purpose in sending the message back to the user who sent it.
 
-			break;
-		}
-		case P_NumberOfPlayer: //Packet Type: Number of player
-		{
-			std::string Message; //string to store our message we received
-			if (!GetString(ID, Message)) //Get the chat message and store it in variable: Message
-				return false; //If we do not properly get the chat message, return false
-							  //Next we need to send the message out to each user
-			Message = std::to_string(TotalConnections);
-			for (int i = 0; i < TotalConnections; i++)
+			if (!SendVector(i, vector, ID)) //Send message to connection at index i, if message fails to be sent...
 			{
-				if (i == ID) //If connection is the user who sent the message...
-				{ 	
-					if (!SendPlayerNum(i, Message)) //Send message to connection at index i, if message fails to be sent...
-					{
-						std::cout << "Failed to send message from client ID: " << ID << " to client ID: " << i << std::endl;
-						std::cout << "Player ID" << std::endl;
-					}
-				}
-				else
-				{
-					continue;
-				}
+				std::cout << "Failed to send Vector from client ID: " << ID << " to client ID: " << i << std::endl;
 			}
-
-			break;
 		}
-		default: //If packet type is not accounted for
+		std::cout << "Processed Vector packet from user ID: " << ID << std::endl;
+		break;
+	}
+	default: //If packet type is not accounted for
+	{
+		std::cout << "Unrecognized packet: " << _packettype << std::endl; //Display that packet was not found
+		break;
+	}
+	}
+
+	return true;
+}
+
+void Server::checkGameReady()
+{
+	if (TotalConnections == 3 && gameReady == false)
+	{
+		SelectChasePlayer();
+		gameReady = true;
+		std::string startKey = "PlayGame";
+		for (int i = 0; i < 3; i++)
 		{
-			std::cout << "Unrecognized packet: " << _packettype << std::endl; //Display that packet was not found
-			break;
+			SendString(i, startKey);
 		}
 	}
-	return true;
+}
+
+std::vector<std::string> Server::separateString(std::string string)
+{
+	std::string str = "";
+	std::vector<std::string> t_values;
+
+	for (auto j : string)
+	{
+		if (j == ',')
+		{
+			t_values.push_back(str);
+			str = "";
+		}
+		else {
+			str = str + j;
+		}
+	}
+
+	t_values.push_back(str);
+	return t_values;
+
+}
+
+
+void Server::SelectChasePlayer()
+{
+	srand(time(NULL)); //creating random seed
+	int chaserNum = rand() % 3 + 1;
+	std::string chasePlayerString = std::to_string(chaserNum);
+	std::cout << chasePlayerString << std::endl;
+	for (int i = 0; i < 3; i++)
+	{
+		SendString(i, chasePlayerString);
+	}
 }
 
 void Server::ClientHandlerThread(int ID) //ID = the index in the SOCKET Connections array
@@ -146,3 +170,4 @@ void Server::ClientHandlerThread(int ID) //ID = the index in the SOCKET Connecti
 	closesocket(serverptr->Connections[ID]);
 	return;
 }
+
