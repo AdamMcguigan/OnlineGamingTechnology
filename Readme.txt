@@ -13,3 +13,5 @@ Lab6: TCP - part 1
 Lab7: TCP - part 2
 
 Project 1: Networked game of Tag
+
+Lab 14: Compression
